@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>引力章鱼 Gravity Octopus — 脑机接口前沿观察</title>
+<title>引力章鱼 Gravity Octopus — BCI · 神经解码 · 密码学</title>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap">
 <style>
 /* ========== RESET & BASE ========== */
@@ -56,7 +56,7 @@ nav {
   font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
   color: var(--accent); text-transform: uppercase;
 }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 20px; list-style: none; margin-right: 40px; }
 .nav-links a {
   color: var(--text-dim); text-decoration: none; font-size: 12px;
   letter-spacing: 1px; text-transform: uppercase;
@@ -65,12 +65,39 @@ nav {
 .nav-links a:hover { color: var(--accent); }
 @media (max-width: 768px) { .nav-links { display: none; } }
 
+/* ========== FILTER BAR ========== */
+.filter-bar {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px; height: 44px;
+  display: flex; align-items: center; gap: 8px;
+}
+.filter-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
+  color: var(--text-faint); text-transform: uppercase; margin-right: 12px;
+}
+.filter-btn {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+  padding: 6px 16px; border: 1px solid var(--border-bright);
+  background: transparent; color: var(--text-dim); cursor: pointer;
+  border-radius: 2px; transition: all 0.2s; text-transform: uppercase;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+body.filtering-bci section[data-cat="crypto"],
+body.filtering-crypto section[data-cat="bci"] { display: none; }
+@media (max-width: 768px) { .filter-bar { padding: 0 16px; } .filter-label { display: none; } }
+
 /* ========== HERO ========== */
 .hero {
   min-height: 100vh;
   display: flex; flex-direction: column; justify-content: center;
   position: relative; overflow: hidden;
-  padding-top: 60px;
+  padding-top: 104px;
 }
 .hero-wave {
   position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
@@ -361,6 +388,55 @@ nav {
   letter-spacing: 1px; text-transform: uppercase;
 }
 
+/* ========== CRYPTO GRID ========== */
+.crypto-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.crypto-card {
+  background: var(--bg); padding: 32px;
+}
+.crypto-num {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  letter-spacing: 2px; margin-bottom: 12px;
+}
+.crypto-card h4 {
+  font-family: var(--display); font-size: 17px; font-weight: 500;
+  margin-bottom: 10px; color: var(--text);
+}
+.crypto-card p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.crypto-tag {
+  display: inline-block; margin-top: 14px; padding: 3px 10px;
+  border: 1px solid var(--border-bright); border-radius: 2px;
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 1px;
+}
+
+/* ========== NUMBERS MUSEUM ========== */
+.numbers-section {
+  background: var(--surface); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.numbers-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.number-card {
+  background: var(--bg); padding: 36px;
+}
+.number-big {
+  font-family: var(--mono); font-size: 32px; font-weight: 400;
+  color: var(--accent); line-height: 1.1; margin-bottom: 8px;
+  word-break: break-all;
+}
+.number-title {
+  font-family: var(--display); font-size: 15px; font-weight: 500;
+  color: var(--text); margin-bottom: 12px;
+}
+.number-story {
+  font-size: 13px; color: var(--text-dim); line-height: 1.7;
+}
+
 /* ========== OUTLOOK ========== */
 .outlook-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
 .outlook-item {
@@ -418,9 +494,18 @@ footer p {
     <li><a href="#tech">技术</a></li>
     <li><a href="#research">研究</a></li>
     <li><a href="#voices">观点</a></li>
-    <li><a href="#math">解码</a></li>
+    <li><a href="#math">密码学</a></li>
+    <li><a href="#numbers">神奇数</a></li>
   </ul>
 </nav>
+
+<!-- ========== FILTER BAR ========== -->
+<div class="filter-bar">
+  <div class="filter-label">Filter</div>
+  <button class="filter-btn active" data-filter="all">全部 All</button>
+  <button class="filter-btn" data-filter="bci">脑机接口 BCI</button>
+  <button class="filter-btn" data-filter="crypto">密码学 Crypto</button>
+</div>
 
 <!-- ========== HERO ========== -->
 <section class="hero">
@@ -429,7 +514,8 @@ footer p {
     <h1>解码神经信号<br>连接<em>硅基文明</em></h1>
     <p class="hero-sub">
       跟踪全球脑机接口（BCI）领域的前沿动态——从侵入式电极阵列到非侵入式脑电解码，
-      从 Neuralink 的意念控制到强脑科技的仿生手，这里是神经与算法交汇处的观察站。
+      从 Neuralink 的意念控制到强脑科技的仿生手；同时记录信号解码背后的数学与密码学前沿。
+      这里是神经、算法与密钥交汇处的观察站。
     </p>
     <div class="hero-stats">
       <div class="hero-stat">
@@ -459,7 +545,7 @@ footer p {
 </section>
 
 <!-- ========== NEWS ========== -->
-<section id="news">
+<section id="news" data-cat="bci">
   <div class="container">
     <div class="section-label">01 / Frontier News</div>
     <h2 class="section-title">前沿<em>动态</em></h2>
@@ -504,6 +590,177 @@ footer p {
   </div>
 </section>
 
+<!-- ========== NUMBERS MUSEUM ========== -->
+<section id="numbers" class="numbers-section" data-cat="crypto">
+  <div class="container">
+    <div class="section-label">02 / Museum of Numbers</div>
+    <h2 class="section-title"><em>神奇数字墙</em></h2>
+    <p style="color:var(--text-dim); margin-bottom:48px; max-width:680px; font-size:15px;">
+      七个在数学史与密码史上惊艳过、困扰过、推翻过数学家的数字。每一个背后都藏着一段博弈——猜想被推翻、纪录被保持、公式被浓缩成一行。
+    </p>
+    <div class="numbers-grid">
+      <div class="number-card">
+        <div class="number-big">65537</div>
+        <div class="number-title">费马素数 F₄ · RSA公钥指数 e</div>
+        <div class="number-story">费马数 Fₙ = 2^(2ⁿ)+1。前五个 F₀~F₄ 都是素数，费马猜想所有 Fₙ 都是素数。65537 = 2¹⁶+1 是最后一个被确认的费马素数，也是 RSA 公钥指数 e 的经典选择——足够大、计算快、又是素数。高斯证明边数为费马素数的正多边形可尺规作图，一位德国数学家花了 10 年才画出正 65537 边形。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">1729</div>
+        <div class="number-title">拉马努金出租车数</div>
+        <div class="number-story">最小可表为两个立方数之和两种方式的数：1³+12³ = 9³+10³ = 1729。哈代去医院探望拉马努金时说搭的出租车号 1729 很无趣，拉马努金立刻回答："不，它是最小的可以用两种方式表示为两个立方数之和的数。"——后来被称为 Taxicab(2)，拉马努金凭直觉记住了别人需要推导的数。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">M₁₂₇</div>
+        <div class="number-title">梅森素数 · 纪录保持 75 年</div>
+        <div class="number-story">2¹²⁷−1 = 170141183460469231731687303715884105727。卢卡斯 1876 年纯手算证明它是素数，从此保持"已知最大素数"纪录整整 75 年，直到 1951 年电子计算机时代才被打破。没有任何电子计算器，仅凭纸笔和卢卡斯数列检验，人类把素数的边界推到了 39 位。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">496</div>
+        <div class="number-title">完全数 · 欧几里得-欧拉定理</div>
+        <div class="number-story">完全数等于除自身外所有真因子之和：1+2+4+8+16+31+62+124+248 = 496。欧几里得在《几何原本》中证明若 2ᵖ−1 是素数则 2ᵖ⁻¹(2ᵖ−1) 是偶完全数；两千年后欧拉证明逆定理成立——偶完全数必为此形式。前四个完全数 6, 28, 496, 8128 在古希腊就被知道，但第五个 33550336 隔了一千五百年才被发现。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">e^{iπ}+1=0</div>
+        <div class="number-title">欧拉恒等式 · 数学中最美的公式</div>
+        <div class="number-story">把数学中最重要的五个常数——0、1、e、π、i——用一个等式连起来：加法单位元、乘法单位元、自然对数底、圆周率、虚数单位，全部归零。物理学家费曼称其为"数学中最卓越的公式"，罗素称欧拉方程是"美的近乎神秘的存在"。一行公式，五个常数，三种运算，零。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">4294967297</div>
+        <div class="number-title">F₅ 反例 · 推翻费马猜想</div>
+        <div class="number-story">F₅ = 2³²+1 = 4294967297。费马曾断言所有 Fₙ 都是素数——他对了前五个，第六个就错了。欧拉在 1732 年发现它 = 641 × 6700417，一个素数猜想当场崩塌。这是数学史上最著名的"归纳法翻车"：从 n=0 到 n=4 全对，n=5 就错。此后再也没有发现新的费马素数。</div>
+      </div>
+      <div class="number-card">
+        <div class="number-big">2048</div>
+        <div class="number-title">RSA 主流密钥位 · 迁移中</div>
+        <div class="number-story">RSA-2048，当前互联网 TLS 加密的主流密钥位数，全球金融、政务、通信系统正在使用。但 Shor 量子算法一旦在容错量子计算机上实现，即可在多项式时间内分解大整数，RSA-2048 将不再安全。NIST 已发布后量子密码标准（Kyber/Dilithium），全球系统正在向后量子密码迁移——2048 这个数字，正在从"安全标准"变成"历史遗产"。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MATH & DECODING ========== -->
+<section id="math" class="math-section" data-cat="crypto">
+  <div class="container">
+    <div class="section-label">03 / Signals, Decoding & Cryptography</div>
+    <h2 class="section-title">信号、解码与<em>密码学</em></h2>
+    <p style="color:var(--text-dim); margin-bottom:48px; max-width:680px; font-size:15px;">
+      脑机接口的核心是从噪声中提取信号，从信号中解码意图——这既是神经科学问题，也是信息论与计算数学问题。神经元放电序列如同加密的报文，解码算法就是破解密钥的密码学。以下从神经解码数学到现代密码学的核心公式与前沿分支，统一呈现。
+    </p>
+    <div class="math-grid">
+      <div class="math-card">
+        <div class="math-label">信号解码模型</div>
+        <div class="math-formula">y(t) = f(x₁(t), x₂(t), ..., xₙ(t)) + ε(t)</div>
+        <div class="math-desc">神经信号解码的基本框架：n个神经元的放电序列{xᵢ(t)}经非线性映射f解码为运动输出y(t)，ε(t)为噪声。现代BCI用深度学习替代手工设计的f。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">泊松点过程编码</div>
+        <div class="math-formula">P(k; λt) = (λt)ᵏe^(-λt) / k!</div>
+        <div class="math-desc">神经元放电被建模为非齐次泊松过程，λ为随时间变化的放电率。这是神经编码的数学基石——解码问题本质上是从观测的k次放电反推潜在的λ(t)。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">线性判别分析 (LDA)</div>
+        <div class="math-formula">w = Σ⁻¹(μ₁ - μ₂)</div>
+        <div class="math-desc">BCI运动想象分类的经典算法：寻找最优投影方向w，使两类信号的类间方差与类内方差之比最大化。EEG信号的二分类（左手/右手运动想象）至今仍在用。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">卡尔曼滤波</div>
+        <div class="math-formula">xₖ = A·xₖ₋₁ + B·uₖ + wₖ<br>zₖ = H·xₖ + vₖ</div>
+        <div class="math-desc">实时脑控光标的标准解码器：状态空间方程描述运动轨迹如何映射到神经信号，卡尔曼滤波递归估计运动状态。BrainGate临床试验的核心算法之一。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">互信息 / 解码比特率</div>
+        <div class="math-formula">I(S;R) = H(S) - H(S|R)</div>
+        <div class="math-desc">BCI系统性能的终极度量：从神经信号R中能提取关于意图S的信息量（比特/秒）。侵入式高密度阵列可达数十bit/s，非侵入式EEG通常仅个位数bit/s。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">HH模型 · 神经元动力学</div>
+        <div class="math-formula">C·dV/dt = I - I_Na - I_K - I_L</div>
+        <div class="math-desc">Hodgkin-Huxley方程——描述神经元膜电位V如何由钠、钾等离子通道电流产生动作电位。BCI电极采集的正是这层膜电位的集体放电。</div>
+      </div>
+    </div>
+
+    <div class="crypto-grid">
+        <div class="crypto-card">
+          <div class="crypto-num">01</div>
+          <h4>格论 Lattice Cryptography</h4>
+          <p>后量子密码头号主流。底层问题：最短向量问题（SVP）、最近向量问题（CVP）、Ring-LWE。NIST标准CRYSTALS-Kyber（密钥封装）与CRYSTALS-Dilithium（签名）均基于格。关联代数：几何数论、分圆域、环代数。</p>
+          <div class="crypto-tag">PQC标准 · FHE基础</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">02</div>
+          <h4>椭圆曲线与配对 ECC / Pairing</h4>
+          <p>有限域上椭圆曲线的离散对数问题（ECDLP）是现代公钥密码基石。Weil/Tate配对支撑身份加密（IBE）、属性加密（ABE）、zk-SNARK零知识证明。超奇异椭圆曲线是配对密码的核心数学对象。</p>
+          <div class="crypto-tag">商用标准 · ZK基础设施</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">03</div>
+          <h4>后量子密码 PQC</h4>
+          <p>NIST于2024年完成首批PQC标准：Kyber（密钥交换）、Dilithium（签名）、Falcon（基于格的签名）、SPHINCS+（基于哈希的签名）。目标是抵抗Shor量子算法对RSA/ECC的威胁，全球金融与政务系统正在迁移。</p>
+          <div class="crypto-tag">国家战略 · 迁移中</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">04</div>
+          <h4>全同态加密 FHE</h4>
+          <p>允许直接在密文上进行任意计算，解密后结果等同于明文计算。当前方案几乎全部基于Ring-LWE格难题。云计算隐私、AI隐私推理的核心技术。同态运算噪声膨胀与密钥尺寸是工程瓶颈。</p>
+          <div class="crypto-tag">隐私计算 · 前沿热点</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">05</div>
+          <h4>零知识证明 ZKP</h4>
+          <p>证明者不泄露任何信息即可验证陈述为真。两条主线：zk-SNARK（基于椭圆曲线配对，简洁快速）与zk-STARK（基于多项式承诺+纠错码，抗量子、透明可信）。底层数学：有限域代数、多项式插值、FFT。</p>
+          <div class="crypto-tag">区块链 · 隐私</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">06</div>
+          <h4>代数编码 McEliece</h4>
+          <p>基于纠错码译码问题的公钥密码体系，1978年提出，至今未被量子算法有效攻击。NIST PQC候选之一（BIKE、Classic McEliece）。底层：线性码、陪集译码、有限几何。优势：无量子算法已知多项式时间破解。</p>
+          <div class="crypto-tag">抗量子 · 经典方案</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">07</div>
+          <h4>多变量多项式密码 MPKC</h4>
+          <p>基于有限域上多元二次方程组（MQ问题）求解困难性。曾是PQC热门候选，部分方案被格罗比纳基（Gröbner basis）方法攻破。代表方案：Rainbow、HFE。底层：交换代数、多项式理想理论。</p>
+          <div class="crypto-tag">代数攻击 · 已部分淘汰</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">08</div>
+          <h4>量子密码 QKD</h4>
+          <p>量子密钥分发利用量子力学测不准原理实现信息论安全的密钥交换。BB84协议、E91协议（纠缠对）。与计算密码的区别：安全性基于物理定律而非计算复杂性。中国"墨子号"卫星已实现千公里级QKD。</p>
+          <div class="crypto-tag">物理安全 · 国家级</div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-num">09</div>
+          <h4>数域筛法与算术几何</h4>
+          <p>整数分解与离散对数的最强攻击算法（GNFS），决定RSA/ECC的安全参数选择。数域筛法的数学工具：代数数论、函数域、椭圆曲线点计数。密码学家用它评估安全强度，密码分析师用它寻找攻击。</p>
+          <div class="crypto-tag">安全评估 · 攻防博弈</div>
+        </div>
+      </div>
+
+    <div class="magic-numbers">
+      <div class="magic-cell">
+        <div class="magic-num">~10¹¹</div>
+        <div class="magic-label">人脑神经元</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">~10¹⁴</div>
+        <div class="magic-label">突触连接</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">1ms</div>
+        <div class="magic-label">动作电位时标</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">~40bit/s</div>
+        <div class="magic-label">侵入式解码速率</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">9µm</div>
+        <div class="magic-label">最薄柔性电极</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Wave divider -->
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
@@ -512,9 +769,9 @@ footer p {
 </div>
 
 <!-- ========== GLOBAL MAP ========== -->
-<section id="map">
+<section id="map" data-cat="bci">
   <div class="container">
-    <div class="section-label">02 / Global Landscape</div>
+    <div class="section-label">04 / Global Landscape</div>
     <h2 class="section-title">全球<em>行业地图</em></h2>
     <div class="map-container">
       <div class="map-svg-wrap">
@@ -633,9 +890,9 @@ footer p {
 </section>
 
 <!-- ========== COMPANIES ========== -->
-<section id="companies">
+<section id="companies" data-cat="bci">
   <div class="container">
-    <div class="section-label">03 / Key Players</div>
+    <div class="section-label">05 / Key Players</div>
     <h2 class="section-title">头部<em>企业</em>矩阵</h2>
     <div class="company-grid">
       <div class="company-card">
@@ -707,9 +964,9 @@ footer p {
 </section>
 
 <!-- ========== FUNDING ========== -->
-<section id="funding">
+<section id="funding" data-cat="bci">
   <div class="container">
-    <div class="section-label">04 / Capital Flow</div>
+    <div class="section-label">06 / Capital Flow</div>
     <h2 class="section-title">融资<em>事件</em></h2>
     <p style="color:var(--text-dim); margin-bottom:48px; max-width:600px; font-size:15px;">
       2023至2025年全球BCI领域融资额年复合增长率超30%。2026年一季度国内融资额已超过2025年全年，资本正从实验室验证期涌入临床商业化阶段。
@@ -750,9 +1007,9 @@ footer p {
 </section>
 
 <!-- ========== TECH PATHS ========== -->
-<section id="tech">
+<section id="tech" data-cat="bci">
   <div class="container">
-    <div class="section-label">05 / Technology Spectrum</div>
+    <div class="section-label">07 / Technology Spectrum</div>
     <h2 class="section-title">技术<em>路线</em>光谱</h2>
     <div class="tech-grid">
       <div class="tech-card">
@@ -805,9 +1062,9 @@ footer p {
 </section>
 
 <!-- ========== RESEARCH ========== -->
-<section id="research">
+<section id="research" data-cat="bci">
   <div class="container">
-    <div class="section-label">06 / Research Frontier</div>
+    <div class="section-label">08 / Research Frontier</div>
     <h2 class="section-title">算法与<em>新材料</em>进展</h2>
     <div class="research-list">
       <div class="research-item">
@@ -863,9 +1120,9 @@ footer p {
 </section>
 
 <!-- ========== VOICES ========== -->
-<section id="voices">
+<section id="voices" data-cat="bci">
   <div class="container">
-    <div class="section-label">07 / Voices</div>
+    <div class="section-label">09 / Voices</div>
     <h2 class="section-title">人物<em>观点</em></h2>
     <div class="voices-grid">
       <div class="voice-card">
@@ -902,80 +1159,10 @@ footer p {
   </div>
 </section>
 
-<!-- ========== MATH & DECODING ========== -->
-<section id="math" class="math-section">
-  <div class="container">
-    <div class="section-label">08 / Decoding Mathematics</div>
-    <h2 class="section-title">解码的<em>数学</em>——信号、公式与密码</h2>
-    <p style="color:var(--text-dim); margin-bottom:48px; max-width:680px; font-size:15px;">
-      脑机接口的核心是从噪声中提取信号，从信号中解码意图。这既是神经科学问题，也是信息论与计算数学问题——神经元放电序列如同加密的报文，而解码算法就是破解密钥的密码学。
-    </p>
-    <div class="math-grid">
-      <div class="math-card">
-        <div class="math-label">信号解码模型</div>
-        <div class="math-formula">y(t) = f(x₁(t), x₂(t), ..., xₙ(t)) + ε(t)</div>
-        <div class="math-desc">神经信号解码的基本框架：n个神经元的放电序列{xᵢ(t)}经非线性映射f解码为运动输出y(t)，ε(t)为噪声。现代BCI用深度学习替代手工设计的f。</div>
-      </div>
-      <div class="math-card">
-        <div class="math-label">泊松点过程编码</div>
-        <div class="math-formula">P(k; λt) = (λt)ᵏe^(-λt) / k!</div>
-        <div class="math-desc">神经元放电被建模为非齐次泊松过程，λ为随时间变化的放电率。这是神经编码的数学基石——解码问题本质上是从观测的k次放电反推潜在的λ(t)。</div>
-      </div>
-      <div class="math-card">
-        <div class="math-label">线性判别分析 (LDA)</div>
-        <div class="math-formula">w = Σ⁻¹(μ₁ - μ₂)</div>
-        <div class="math-desc">BCI运动想象分类的经典算法：寻找最优投影方向w，使两类信号的类间方差与类内方差之比最大化。EEG信号的二分类（左手/右手运动想象）至今仍在用。</div>
-      </div>
-      <div class="math-card">
-        <div class="math-label">卡尔曼滤波</div>
-        <div class="math-formula">xₖ = A·xₖ₋₁ + B·uₖ + wₖ<br>zₖ = H·xₖ + vₖ</div>
-        <div class="math-desc">实时脑控光标的标准解码器：状态空间方程描述运动轨迹如何映射到神经信号，卡尔曼滤波递归估计运动状态。BrainGate临床试验的核心算法之一。</div>
-      </div>
-      <div class="math-card">
-        <div class="math-label">互信息 / 解码比特率</div>
-        <div class="math-formula">I(S;R) = H(S) - H(S|R)</div>
-        <div class="math-desc">BCI系统性能的终极度量：从神经信号R中能提取关于意图S的信息量（比特/秒）。侵入式高密度阵列可达数十bit/s，非侵入式EEG通常仅个位数bit/s。</div>
-      </div>
-      <div class="math-card">
-        <div class="math-label">HH模型 · 神经元动力学</div>
-        <div class="math-formula">C·dV/dt = I - I_Na - I_K - I_L</div>
-        <div class="math-desc">Hodgkin-Huxley方程——描述神经元膜电位V如何由钠、钾等离子通道电流产生动作电位。BCI电极采集的正是这层膜电位的集体放电。</div>
-      </div>
-    </div>
-
-    <div class="magic-numbers">
-      <div class="magic-cell">
-        <div class="magic-num">~10¹¹</div>
-        <div class="magic-label">人脑神经元</div>
-      </div>
-      <div class="magic-cell">
-        <div class="magic-num">~10¹⁴</div>
-        <div class="magic-label">突触连接</div>
-      </div>
-      <div class="magic-cell">
-        <div class="magic-num">1ms</div>
-        <div class="magic-label">动作电位时标</div>
-      </div>
-      <div class="magic-cell">
-        <div class="magic-num">~40bit/s</div>
-        <div class="magic-label">侵入式解码速率</div>
-      </div>
-      <div class="magic-cell">
-        <div class="magic-num">9µm</div>
-        <div class="magic-label">最薄柔性电极</div>
-      </div>
-      <div class="magic-cell">
-        <div class="magic-num">1/100</div>
-        <div class="magic-label">拉伸力对比 Neuralink</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ========== OUTLOOK ========== -->
-<section id="outlook">
+<section id="outlook" data-cat="bci">
   <div class="container">
-    <div class="section-label">09 / Outlook</div>
+    <div class="section-label">10 / Outlook</div>
     <h2 class="section-title">趋势<em>展望</em></h2>
     <div class="outlook-list">
       <div class="outlook-item">
@@ -1024,6 +1211,21 @@ footer p {
     <p style="margin-top:8px;">信息来源：Neuralink官方 · 36氪 · 钛媒体 · 澎湃新闻 · 光明网 · 中科院 · 清华大学 · Nature/Science 子刊</p>
   </div>
 </footer>
+
+<script>
+// ===== FILTER LOGIC =====
+const buttons = document.querySelectorAll('.filter-btn');
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.body.classList.remove('filtering-bci','filtering-crypto');
+    if (f === 'bci') document.body.classList.add('filtering-bci');
+    if (f === 'crypto') document.body.classList.add('filtering-crypto');
+  });
+});
+</script>
 
 </body>
 </html>
