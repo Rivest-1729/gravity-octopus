@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>引力章鱼 Gravity Octopus — 脑机接口前沿观察</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FFFFFF;
+  --surface: #FAFAFA;
+  --surface-2: #F3F0FF;
+  --border: #E8E8EC;
+  --border-bright: #D4D4DC;
+  --text: #111111;
+  --text-dim: #666666;
+  --text-faint: #999999;
+  --accent: #7C3AED;
+  --accent-dim: rgba(124,58,237,0.08);
+  --accent-glow: rgba(124,58,237,0.2);
+  --warn: #DC2626;
+  --gold: #B45309;
+  --display: 'Space Grotesk', sans-serif;
+  --body: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: #FFFFFF; }
+
+/* ========== LAYOUT ========== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+section { padding: 100px 0; position: relative; }
+
+/* ========== NAV ========== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
+  color: var(--accent); text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 12px;
+  letter-spacing: 1px; text-transform: uppercase;
+  font-family: var(--mono); transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+@media (max-width: 768px) { .nav-links { display: none; } }
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+  padding-top: 60px;
+}
+.hero-wave {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  opacity: 0.6;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase; margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: var(--display); font-size: clamp(48px, 8vw, 96px);
+  font-weight: 300; line-height: 1.05; letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+.hero h1 em {
+  font-style: normal; color: var(--accent); font-weight: 500;
+}
+.hero-sub {
+  font-size: 18px; color: var(--text-dim); max-width: 560px;
+  line-height: 1.7; font-weight: 300;
+}
+.hero-stats {
+  display: flex; gap: 64px; margin-top: 64px; flex-wrap: wrap;
+}
+.hero-stat .num {
+  font-family: var(--mono); font-size: 36px; font-weight: 400;
+  color: var(--accent); line-height: 1;
+}
+.hero-stat .label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
+  color: var(--text-faint); text-transform: uppercase; margin-top: 8px;
+}
+
+/* ========== SECTION HEADERS ========== */
+.section-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::before {
+  content: ''; width: 24px; height: 1px; background: var(--accent);
+}
+.section-title {
+  font-family: var(--display); font-size: clamp(32px, 4vw, 48px);
+  font-weight: 300; line-height: 1.15; margin-bottom: 48px;
+  letter-spacing: -1px;
+}
+.section-title em { font-style: normal; color: var(--accent); }
+
+/* ========== DIVIDER WAVE ========== */
+.wave-divider {
+  height: 60px; width: 100%; opacity: 0.3;
+}
+.wave-divider svg { width: 100%; height: 100%; }
+
+/* ========== NEWS CARDS ========== */
+.news-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+.news-card {
+  background: var(--surface); padding: 32px;
+  transition: background 0.3s;
+}
+.news-card:hover { background: var(--surface-2); }
+.news-date {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.news-cat {
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+}
+.news-card h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 500;
+  line-height: 1.4; margin-bottom: 12px; color: var(--text);
+}
+.news-card p {
+  font-size: 14px; color: var(--text-dim); line-height: 1.6;
+}
+
+/* ========== GLOBAL MAP ========== */
+.map-container {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 48px; position: relative;
+}
+.map-svg-wrap { width: 100%; height: 480px; position: relative; }
+.map-svg-wrap svg { width: 100%; height: 100%; }
+.map-legend {
+  display: flex; gap: 32px; margin-top: 32px; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+}
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.map-stats-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  margin-top: 48px;
+}
+.map-stat {
+  background: var(--surface); padding: 24px;
+}
+.map-stat .country {
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+}
+.map-stat .val {
+  font-family: var(--display); font-size: 28px; font-weight: 400;
+  color: var(--text); margin-bottom: 4px;
+}
+.map-stat .desc { font-size: 12px; color: var(--text-dim); }
+
+/* ========== COMPANIES ========== */
+.company-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+.company-card {
+  background: var(--surface); padding: 28px;
+  transition: background 0.3s;
+}
+.company-card:hover { background: var(--surface-2); }
+.company-name {
+  font-family: var(--display); font-size: 20px; font-weight: 500;
+  margin-bottom: 4px;
+}
+.company-country {
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+}
+.company-tag {
+  display: inline-block; padding: 3px 10px;
+  border: 1px solid var(--border-bright); border-radius: 2px;
+  font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+  letter-spacing: 1px; margin-bottom: 16px; margin-right: 6px;
+}
+.company-tag.invasive { border-color: var(--warn); color: var(--warn); }
+.company-tag.noninvasive { border-color: var(--accent); color: var(--accent); }
+.company-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.company-fund {
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 12px; color: var(--gold);
+}
+
+/* ========== FUNDING TIMELINE ========== */
+.funding-list { border-left: 1px solid var(--border); }
+.funding-item {
+  padding: 24px 32px; position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.funding-item::before {
+  content: ''; position: absolute; left: -4px; top: 32px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+}
+.funding-date {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  letter-spacing: 1px; margin-bottom: 6px;
+}
+.funding-company {
+  font-family: var(--display); font-size: 18px; font-weight: 500;
+  margin-bottom: 4px;
+}
+.funding-amount {
+  font-family: var(--mono); font-size: 14px; color: var(--gold);
+  margin-bottom: 8px;
+}
+.funding-desc { font-size: 13px; color: var(--text-dim); }
+
+/* ========== TECH PATHS ========== */
+.tech-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+.tech-card {
+  background: var(--surface); padding: 32px;
+}
+.tech-icon {
+  width: 48px; height: 48px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-bright); border-radius: 4px;
+}
+.tech-name {
+  font-family: var(--display); font-size: 20px; font-weight: 500;
+  margin-bottom: 4px;
+}
+.tech-sig {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  margin-bottom: 16px;
+}
+.tech-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.tech-companies {
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  line-height: 1.8;
+}
+
+/* ========== RESEARCH ========== */
+.research-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.research-item {
+  background: var(--surface); padding: 32px;
+  display: grid; grid-template-columns: 80px 1fr; gap: 32px;
+  align-items: start;
+}
+.research-tag {
+  font-family: var(--mono); font-size: 10px; color: var(--accent);
+  letter-spacing: 2px; text-transform: uppercase;
+  padding-top: 4px;
+}
+.research-item h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 500;
+  margin-bottom: 8px;
+}
+.research-item p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+.research-meta {
+  margin-top: 12px; font-family: var(--mono); font-size: 11px;
+  color: var(--text-faint); letter-spacing: 1px;
+}
+
+/* ========== VOICES ========== */
+.voices-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.voice-card {
+  background: var(--surface); padding: 36px;
+}
+.voice-quote {
+  font-family: var(--display); font-size: 18px; font-weight: 300;
+  line-height: 1.6; color: var(--text); margin-bottom: 24px;
+  position: relative; padding-left: 20px;
+}
+.voice-quote::before {
+  content: '"'; position: absolute; left: 0; top: -8px;
+  font-size: 48px; color: var(--accent); opacity: 0.3;
+  font-family: serif;
+}
+.voice-person {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  letter-spacing: 1px;
+}
+.voice-title {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  letter-spacing: 1px; margin-top: 4px;
+}
+
+/* ========== MATH ========== */
+.math-section {
+  background: var(--surface); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.math-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+.math-card {
+  padding: 32px; border: 1px solid var(--border);
+  background: var(--bg);
+}
+.math-formula {
+  font-family: var(--mono); font-size: 16px; color: var(--accent);
+  margin-bottom: 16px; line-height: 1.8;
+}
+.math-label {
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+}
+.math-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.magic-numbers {
+  margin-top: 64px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.magic-cell {
+  background: var(--bg); padding: 24px; text-align: center;
+}
+.magic-num {
+  font-family: var(--mono); font-size: 32px; color: var(--accent);
+  line-height: 1; margin-bottom: 8px;
+}
+.magic-label {
+  font-family: var(--mono); font-size: 10px; color: var(--text-faint);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* ========== OUTLOOK ========== */
+.outlook-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.outlook-item {
+  background: var(--surface); padding: 32px;
+  display: grid; grid-template-columns: 60px 1fr; gap: 24px;
+}
+.outlook-year {
+  font-family: var(--mono); font-size: 24px; color: var(--accent);
+  font-weight: 400;
+}
+.outlook-item h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 500;
+  margin-bottom: 8px;
+}
+.outlook-item p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+/* ========== FOOTER ========== */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 0; text-align: center;
+}
+footer p {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  letter-spacing: 1px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  section { padding: 60px 0; }
+  .container { padding: 0 20px; }
+  .hero-stats { gap: 32px; }
+  .research-item { grid-template-columns: 1fr; gap: 12px; }
+  .map-svg-wrap { height: 300px; }
+  .map-container { padding: 20px; }
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.pulse { animation: pulse-glow 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <div class="nav-brand">// 引力章鱼 GRAVITY OCTOPUS</div>
+  <ul class="nav-links">
+    <li><a href="#news">动态</a></li>
+    <li><a href="#map">地图</a></li>
+    <li><a href="#companies">企业</a></li>
+    <li><a href="#funding">融资</a></li>
+    <li><a href="#tech">技术</a></li>
+    <li><a href="#research">研究</a></li>
+    <li><a href="#voices">观点</a></li>
+    <li><a href="#math">解码</a></li>
+  </ul>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-tag">Brain-Computer Interface · Intelligence Index</div>
+    <h1>解码神经信号<br>连接<em>硅基文明</em></h1>
+    <p class="hero-sub">
+      跟踪全球脑机接口（BCI）领域的前沿动态——从侵入式电极阵列到非侵入式脑电解码，
+      从 Neuralink 的意念控制到强脑科技的仿生手，这里是神经与算法交汇处的观察站。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">800+</div>
+        <div class="label">全球企业</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">~$5B</div>
+        <div class="label">累计融资</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">21</div>
+        <div class="label">Neuralink 植入者</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">CAGR 30%+</div>
+        <div class="label">融资年增长</div>
+      </div>
+    </div>
+  </div>
+  <!-- Neural wave background -->
+  <svg class="hero-wave" viewBox="0 0 1200 300" preserveAspectRatio="none">
+    <path d="M0,150 Q50,140 100,150 T200,150 T300,150 T400,150 T500,150 T600,150 T700,150 T800,150 T900,150 T1000,150 T1100,150 T1200,150" fill="none" stroke="rgba(124,58,237,0.2)" stroke-width="1"/>
+    <path d="M0,140 Q30,100 60,140 T120,140 T180,140 T240,140 T300,140 T360,140 T420,140 T480,140 T540,140 T600,140 T660,140 T720,140 T780,140 T840,140 T900,140 T960,140 T1020,140 T1080,140 T1140,140 T1200,140" fill="none" stroke="rgba(124,58,237,0.12)" stroke-width="1"/>
+    <path d="M0,160 Q20,120 40,160 T80,160 T120,160 T160,160 T200,160 T240,160 T280,160 T320,160 T360,160 T400,160 T440,160 T480,160 T520,160 T560,160 T600,160 T640,160 T680,160 T720,160 T760,160 T800,160 T840,160 T880,160 T920,160 T960,160 T1000,160 T1040,160 T1080,160 T1120,160 T1160,160 T1200,160" fill="none" stroke="rgba(124,58,237,0.08)" stroke-width="1"/>
+  </svg>
+</section>
+
+<!-- ========== NEWS ========== -->
+<section id="news">
+  <div class="container">
+    <div class="section-label">01 / Frontier News</div>
+    <h2 class="section-title">前沿<em>动态</em></h2>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-date">2026.07</div>
+        <div class="news-cat">Clinical</div>
+        <h3>Neuralink 受试者意念操控电动轮椅</h3>
+        <p>马斯克通过官方视频展示临床试验参与者仅靠意念成功操控电动轮椅，技术验证从打字、机械臂延伸至移动辅助设备。</p>
+      </div>
+      <div class="news-card">
+        <div class="news-date">2026.05</div>
+        <div class="news-cat">Program</div>
+        <h3>Neuralink 启动 "Blindsight" 盲视项目</h3>
+        <p>2026年Q2启动视觉皮层电刺激计划，通过直接向大脑视觉皮层输送电信号，帮助失明者恢复视觉感知。r1手术机器人实现自动化植入。</p>
+      </div>
+      <div class="news-card">
+        <div class="news-date">2026.01</div>
+        <div class="news-cat">Funding</div>
+        <h3>强脑科技完成20亿元Pre-IPO融资</h3>
+        <p>刷新国内脑机接口单笔融资纪录。强脑科技（BrainCo）成为全球非侵入式BCI研发投入最大的企业之一，与Neuralink形成双雄格局。</p>
+      </div>
+      <div class="news-card">
+        <div class="news-date">2026.05</div>
+        <div class="news-cat">Investment</div>
+        <h3>Sam Altman 创立 Merge Labs，投入2.5亿美元</h3>
+        <p>OpenAI创始人萨姆·奥特曼宣布进军脑机接口，选择绕开手术植入的技术路径，投入2.5亿美元成立Merge Labs。</p>
+      </div>
+      <div class="news-card">
+        <div class="news-date">2026.02</div>
+        <div class="news-cat">Breakthrough</div>
+        <h3>中国团队研制可拉伸柔性电极破解核心难题</h3>
+        <p>北京脑科学与类脑研究所方英团队提出高通量可拉伸电极架构，拉伸力度仅为Neuralink线性电极的1/100，极大降低免疫反应。</p>
+      </div>
+      <div class="news-card">
+        <div class="news-date">2026.05</div>
+        <div class="news-cat">Material</div>
+        <h3>清华9微米超柔性全有机脑电极阵列</h3>
+        <p>清华大学徐晓敏团队基于界面渗流机制开发超高导电水凝胶（CHIP），构建厚度仅9µm的全有机超柔性脑皮层电极阵列。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 Q60,10 120,30 T240,30 T360,30 T480,30 T600,30 T720,30 T840,30 T960,30 T1080,30 T1200,30" fill="none" stroke="var(--border)" stroke-width="1"/>
+  </svg>
+</div>
+
+<!-- ========== GLOBAL MAP ========== -->
+<section id="map">
+  <div class="container">
+    <div class="section-label">02 / Global Landscape</div>
+    <h2 class="section-title">全球<em>行业地图</em></h2>
+    <div class="map-container">
+      <div class="map-svg-wrap">
+        <!-- Simplified world map with BCI hotspots -->
+        <svg viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+          <!-- Abstract world map outlines -->
+          <g opacity="0.15" fill="none" stroke="var(--border-bright)" stroke-width="1">
+            <!-- North America -->
+            <path d="M80,100 L200,80 L280,120 L260,200 L200,260 L120,240 L80,180 Z"/>
+            <!-- South America -->
+            <path d="M220,290 L280,280 L300,350 L260,430 L210,400 L200,330 Z"/>
+            <!-- Europe -->
+            <path d="M440,100 L520,90 L540,140 L490,170 L440,150 Z"/>
+            <!-- Africa -->
+            <path d="M450,200 L540,190 L560,280 L500,380 L440,340 L430,250 Z"/>
+            <!-- Asia -->
+            <path d="M560,80 L800,70 L880,130 L850,220 L700,250 L580,200 L550,140 Z"/>
+            <!-- Australia -->
+            <path d="M780,350 L880,340 L900,400 L830,430 L770,400 Z"/>
+          </g>
+
+          <!-- BCI Company Hotspots -->
+          <!-- San Francisco Bay Area -->
+          <g>
+            <circle cx="155" cy="155" r="6" fill="var(--accent)" class="pulse"/>
+            <circle cx="155" cy="155" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.3"/>
+            <text x="170" y="150" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">SF Bay Area</text>
+            <text x="170" y="165" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">Neuralink · Paradromics · Kernel</text>
+          </g>
+          <!-- New York -->
+          <g>
+            <circle cx="255" cy="165" r="5" fill="var(--accent)"/>
+            <text x="270" y="162" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">New York</text>
+            <text x="270" y="175" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">Synchron</text>
+          </g>
+          <!-- Salt Lake City -->
+          <g>
+            <circle cx="195" cy="140" r="4" fill="var(--accent)" opacity="0.7"/>
+            <text x="208" y="137" fill="var(--text-dim)" font-family="JetBrains Mono, monospace" font-size="10">Blackrock</text>
+          </g>
+          <!-- Toronto / Canada -->
+          <g>
+            <circle cx="260" cy="105" r="4" fill="var(--accent)" opacity="0.6"/>
+            <text x="273" y="102" fill="var(--text-dim)" font-family="JetBrains Mono, monospace" font-size="10">Emotiv</text>
+          </g>
+          <!-- Germany -->
+          <g>
+            <circle cx="470" cy="125" r="4" fill="var(--gold)" opacity="0.8"/>
+            <text x="483" y="122" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">Germany</text>
+            <text x="483" y="135" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">NeuroTech / g.tec</text>
+          </g>
+          <!-- UK -->
+          <g>
+            <circle cx="445" cy="115" r="3" fill="var(--gold)" opacity="0.6"/>
+          </g>
+          <!-- Shanghai -->
+          <g>
+            <circle cx="760" cy="175" r="6" fill="var(--warn)" class="pulse"/>
+            <circle cx="760" cy="175" r="14" fill="none" stroke="var(--warn)" stroke-width="1" opacity="0.3"/>
+            <text x="775" y="172" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">Shanghai</text>
+            <text x="775" y="185" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">脑虎科技 · 阶梯医疗</text>
+          </g>
+          <!-- Hangzhou -->
+          <g>
+            <circle cx="775" cy="195" r="5" fill="var(--warn)"/>
+            <text x="790" y="192" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">Hangzhou</text>
+            <text x="790" y="205" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">强脑科技 BrainCo</text>
+          </g>
+          <!-- Beijing -->
+          <g>
+            <circle cx="740" cy="155" r="5" fill="var(--warn)"/>
+            <text x="755" y="152" fill="var(--text)" font-family="JetBrains Mono, monospace" font-size="11">Beijing</text>
+            <text x="755" y="165" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">博睿康 · 智冉医疗</text>
+          </g>
+          <!-- Shenzhen -->
+          <g>
+            <circle cx="765" cy="220" r="4" fill="var(--warn)" opacity="0.7"/>
+            <text x="778" y="217" fill="var(--text-dim)" font-family="JetBrains Mono, monospace" font-size="10">深圳先进院</text>
+          </g>
+          <!-- Boston -->
+          <g>
+            <circle cx="265" cy="145" r="3" fill="var(--accent)" opacity="0.5"/>
+            <text x="278" y="142" fill="var(--text-faint)" font-family="JetBrains Mono, monospace" font-size="9">Boston</text>
+          </g>
+        </svg>
+      </div>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> 美国 / 北美</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div> 中国</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> 欧洲</div>
+      </div>
+    </div>
+    <div class="map-stats-row">
+      <div class="map-stat">
+        <div class="country">United States</div>
+        <div class="val">~12%</div>
+        <div class="desc">企业占比 · 侵入式电极、高通量解码全球领先，临床落地最快</div>
+      </div>
+      <div class="map-stat">
+        <div class="country">China</div>
+        <div class="val">~38%</div>
+        <div class="desc">企业占比 · 非侵入式脑电采集与消费级产品，政策驱动</div>
+      </div>
+      <div class="map-stat">
+        <div class="country">Germany / EU</div>
+        <div class="val">~11%</div>
+        <div class="desc">企业占比 · 神经调控、精密制造，医疗合规体系完善</div>
+      </div>
+      <div class="map-stat">
+        <div class="country">Patents</div>
+        <div class="val">~3.3万</div>
+        <div class="desc">中美欧三地专利总量，美国约1.8万件，中国约1.5万件</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMPANIES ========== -->
+<section id="companies">
+  <div class="container">
+    <div class="section-label">03 / Key Players</div>
+    <h2 class="section-title">头部<em>企业</em>矩阵</h2>
+    <div class="company-grid">
+      <div class="company-card">
+        <div class="company-name">Neuralink</div>
+        <div class="company-country">San Francisco, USA</div>
+        <span class="company-tag invasive">侵入式</span>
+        <span class="company-tag">电极阵列</span>
+        <p class="company-desc">马斯克创立，开发高密度柔性电极阵列与R1手术机器人。已有21名临床植入者，实现意念打字、机械臂控制、电动轮椅操控。2026年启动Blindsight视觉恢复项目。</p>
+        <div class="company-fund">$9.6B 估值 · 累计融资~$1.85B</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">BrainCo 强脑科技</div>
+        <div class="company-country">Hangzhou, China</div>
+        <span class="company-tag noninvasive">非侵入式</span>
+        <span class="company-tag">消费级</span>
+        <p class="company-desc">韩璧丞创立，全球非侵入式BCI研发投入最大企业之一。产品涵盖智能仿生手（可意念控制每根手指）、脑机智能安睡仪。拥有270+项BCI发明专利。</p>
+        <div class="company-fund">¥20亿 Pre-IPO · 2026.01</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">Synchron</div>
+        <div class="company-country">New York, USA</div>
+        <span class="company-tag invasive">介入式</span>
+        <span class="company-tag">血管植入</span>
+        <p class="company-desc"> pioneered endovascular BCI技术，通过颈静脉植入Stentrode支架电极，无需开颅。主攻运动障碍患者的意念数字设备控制，已进入多阶段临床试验。</p>
+        <div class="company-fund">多轮融资 · 临床阶段</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">BrainRobotics 脑虎科技</div>
+        <div class="company-country">Shanghai, China</div>
+        <span class="company-tag invasive">侵入式</span>
+        <span class="company-tag">蚕丝蛋白</span>
+        <p class="company-desc">陶虎团队创立，开发"三全"脑机接口（全植入、无线、柔性）。电极材料为蚕丝蛋白，与华山医院合作开展临床试验，实现运动与汉语语言实时解码。</p>
+        <div class="company-fund">多轮融资 · 中科院系</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">Blackrock Neurotech</div>
+        <div class="company-country">Salt Lake City, USA</div>
+        <span class="company-tag invasive">侵入式</span>
+        <span class="company-tag">Utah Array</span>
+        <p class="company-desc">全球最早的植入式神经接口系统提供商，Utah Array犹他电极系统由BrainGate主导推进，已在全球完成数十例患者植入，可实现脑控打字与光标控制。</p>
+        <div class="company-fund">Research-grade 系统</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">阶梯医疗</div>
+        <div class="company-country">China</div>
+        <span class="company-tag invasive">侵入式</span>
+        <span class="company-tag">阿里巴巴投资</span>
+        <p class="company-desc">获阿里巴巴领投5亿元融资，专注侵入式脑机接口设备研发，推进高通量神经信号采集与解码系统的临床转化。</p>
+        <div class="company-fund">¥5亿 · 阿里领投</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">Paradromics</div>
+        <div class="company-country">Austin, USA</div>
+        <span class="company-tag invasive">侵入式</span>
+        <span class="company-tag">高通量</span>
+        <p class="company-desc">专注高数据率脑机接口，开发高通量神经记录与刺激系统，目标为严重神经功能障碍患者提供终极通信解决方案。</p>
+        <div class="company-fund">B轮 · 美国DARPA支持</div>
+      </div>
+      <div class="company-card">
+        <div class="company-name">Merge Labs</div>
+        <div class="company-country">USA</div>
+        <span class="company-tag noninvasive">非植入路径</span>
+        <span class="company-tag">Sam Altman</span>
+        <p class="company-desc">OpenAI创始人Sam Altman于2026年参与创立，投入2.5亿美元。选择绕开手术植入的技术路径，探索非侵入式或微创路线。</p>
+        <div class="company-fund">$250M · 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FUNDING ========== -->
+<section id="funding">
+  <div class="container">
+    <div class="section-label">04 / Capital Flow</div>
+    <h2 class="section-title">融资<em>事件</em></h2>
+    <p style="color:var(--text-dim); margin-bottom:48px; max-width:600px; font-size:15px;">
+      2023至2025年全球BCI领域融资额年复合增长率超30%。2026年一季度国内融资额已超过2025年全年，资本正从实验室验证期涌入临床商业化阶段。
+    </p>
+    <div class="funding-list">
+      <div class="funding-item">
+        <div class="funding-date">2026.05</div>
+        <div class="funding-company">Neuralink · 阿曼投资局战略投资</div>
+        <div class="funding-amount">战略投资 · 金额未披露</div>
+        <div class="funding-desc">阿曼投资局宣布投资Neuralink，主权基金入场标志BCI技术获国家级资本认可。</div>
+      </div>
+      <div class="funding-item">
+        <div class="funding-date">2026.01</div>
+        <div class="funding-company">强脑科技 BrainCo · Pre-IPO</div>
+        <div class="funding-amount">¥20亿元 · 国内单笔纪录</div>
+        <div class="funding-desc">刷新国内脑机接口单笔融资纪录，非侵入式路线获顶级资本加注。</div>
+      </div>
+      <div class="funding-item">
+        <div class="funding-date">2026.01</div>
+        <div class="funding-company">Merge Labs · Sam Altman 创立</div>
+        <div class="funding-amount">$2.5亿美元</div>
+        <div class="funding-desc">OpenAI创始人入局，选择非植入技术路径，AI+BCI融合趋势明确。</div>
+      </div>
+      <div class="funding-item">
+        <div class="funding-date">2025.06</div>
+        <div class="funding-company">Neuralink · Series E</div>
+        <div class="funding-amount">$6.5亿 · 投后估值$9.6B</div>
+        <div class="funding-desc">ARK、红杉、Founders Fund、G42、QIA等参投，累计Primary融资约$1.85B。</div>
+      </div>
+      <div class="funding-item">
+        <div class="funding-date">2025</div>
+        <div class="funding-company">阶梯医疗 · A轮</div>
+        <div class="funding-amount">¥5亿 · 阿里巴巴领投</div>
+        <div class="funding-desc">互联网巨头下场，侵入式BCI赛道获战略级资源注入。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TECH PATHS ========== -->
+<section id="tech">
+  <div class="container">
+    <div class="section-label">05 / Technology Spectrum</div>
+    <h2 class="section-title">技术<em>路线</em>光谱</h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="1.5">
+            <path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z"/>
+          </svg>
+        </div>
+        <div class="tech-name">侵入式 Invasive</div>
+        <div class="tech-sig">皮层内 · 单神经元</div>
+        <p class="tech-desc">开颅手术将微电极阵列植入大脑皮层内部，直接记录单个神经元放电信号。信号空间分辨率极高、信噪比优异，但存在手术风险、免疫排异与长期稳定性挑战。</p>
+        <div class="tech-companies">代表：Neuralink · Blackrock · 脑虎科技 · 阶梯医疗</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 8v4l2 2"/>
+          </svg>
+        </div>
+        <div class="tech-name">半侵入式 Semi-invasive</div>
+        <div class="tech-sig">硬膜外 / 硬膜下</div>
+        <p class="tech-desc">微创钻孔将电极放置于脑表面（硬膜外或硬膜下），在开颅创伤与信号质量间取得平衡。微灵医疗WE-LINK-ING、博睿康等走此路线。</p>
+        <div class="tech-companies">代表：微灵医疗 · 博睿康 · 智冉医疗</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5">
+            <path d="M4 12h4l2-6 4 12 2-6h4"/>
+          </svg>
+        </div>
+        <div class="tech-name">非侵入式 Non-invasive</div>
+        <div class="tech-sig">头皮 EEG / fNIRS</div>
+        <p class="tech-desc">通过头皮电极采集脑电信号（EEG）或近红外光谱（fNIRS）监测血氧变化。安全、低成本、可消费级，但信号微弱、分辨率有限。占全球企业约80%。</p>
+        <div class="tech-companies">代表：强脑科技 · Emotiv · Kernel</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B9FCC" stroke-width="1.5">
+            <path d="M4 12c2-4 6-4 8 0s6 4 8 0"/>
+          </svg>
+        </div>
+        <div class="tech-name">介入式 Endovascular</div>
+        <div class="tech-sig">血管内支架</div>
+        <p class="tech-desc">通过血管介入手术（如颈静脉）将Stentrode支架电极送至大脑皮层表面血管，无需开颅。Synchron是全球先行者，融合了微创血管技术与神经信号采集。</p>
+        <div class="tech-companies">代表：Synchron</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== RESEARCH ========== -->
+<section id="research">
+  <div class="container">
+    <div class="section-label">06 / Research Frontier</div>
+    <h2 class="section-title">算法与<em>新材料</em>进展</h2>
+    <div class="research-list">
+      <div class="research-item">
+        <div class="research-tag">材料</div>
+        <div>
+          <h3>9µm全有机超柔性脑皮层电极阵列</h3>
+          <p>清华大学徐晓敏团队基于界面渗流结构开发超高导电水凝胶（CHIP），构建厚度仅9微米的全有机超柔性电极阵列，实现低阻抗、高通量、长期稳定的神经信号记录，可与脑组织无缝贴合。</p>
+          <div class="research-meta">清华大学深圳国际研究生院 · 2026.05</div>
+        </div>
+      </div>
+      <div class="research-item">
+        <div class="research-tag">材料</div>
+        <div>
+          <h3>高通量可拉伸柔性电极——拉伸力度仅为Neuralink的1/100</h3>
+          <p>北京脑科学与类脑研究所方英团队提出新型可拉伸电极架构，可动态跟随大脑运动，破解传统柔性电极易移位、易脱出的国际难题。猕猴实验验证长期稳定性。</p>
+          <div class="research-meta">智冉医疗 · 方英团队 · Nature 子刊 · 2026.02</div>
+        </div>
+      </div>
+      <div class="research-item">
+        <div class="research-tag">材料</div>
+        <div>
+          <h3>激光诱导石墨烯（LIG）多模态柔性闭环BCI</h3>
+          <p>深圳先进院鲁艺团队开发基于LIG的多模态柔性脑机接口，可同步监测生理信号与神经电生理信号，在癫痫小鼠模型中实现按需闭环调控干预。</p>
+          <div class="research-meta">深圳先进院 · Adv. Funct. Mater. · 2026.05</div>
+        </div>
+      </div>
+      <div class="research-item">
+        <div class="research-tag">算法</div>
+        <div>
+          <h3>低阻抗柔性电极 + 轻量化神经解码算法协同框架</h3>
+          <p>南邮赵强/李杨团队与黄维院士团队融合EDOT低聚物水凝胶电极与轻量化解码算法，为低功耗可穿戴BCI提供有效解决方案。</p>
+          <div class="research-meta">南京邮电大学 · Nature Sensing · 2026.07</div>
+        </div>
+      </div>
+      <div class="research-item">
+        <div class="research-tag">材料</div>
+        <div>
+          <h3>交替肽多功能涂层——通用脑机界面融合方案</h3>
+          <p>中科院理化所研发交替肽涂层，兼顾生物相容性、广谱抗菌、抗蛋白黏附、抑制异物反应四大特性，不破坏电极电化学性能，为长效植入式BCI开辟新路径。</p>
+          <div class="research-meta">中科院理化所 · 2026.08</div>
+        </div>
+      </div>
+      <div class="research-item">
+        <div class="research-tag">临床</div>
+        <div>
+          <h3>植入式水凝胶神经探针治疗慢性疼痛</h3>
+          <p>中科院长春应化所张强团队开发植入式水凝胶神经探针，为慢性疼痛干预与管理提供新技术路径，拓展BCI从运动解码走向神经调控治疗。</p>
+          <div class="research-meta">中科院长春应化所 · Adv. Mater. · 2026.05</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== VOICES ========== -->
+<section id="voices">
+  <div class="container">
+    <div class="section-label">07 / Voices</div>
+    <h2 class="section-title">人物<em>观点</em></h2>
+    <div class="voices-grid">
+      <div class="voice-card">
+        <div class="voice-quote">脑机接口产业迎来了奇点时刻。传感器经过百年积累终于能可靠采集微弱信号，AI工具成熟极大降低了信号解析的复杂度——这是产业爆发的元年。</div>
+        <div class="voice-person">韩璧丞</div>
+        <div class="voice-title">强脑科技 BrainCo 创始人兼CEO · 哈佛脑科学博士</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">开颅植入芯片虽能获取更清晰的信号，但手术风险、感染隐患和高昂成本让它难以普及。我们坚定地做非侵入式——脑机接口产品不能仅供少数人使用。</div>
+        <div class="voice-person">韩璧丞</div>
+        <div class="voice-title">论技术路线选择 · 非侵入式信仰者</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">我们的神经控制假肢已经能够完全通过意念控制每一个手指的运动。未来，我们可能通过想象就能发出声音，或者用意念进行打字。</div>
+        <div class="voice-person">韩璧丞</div>
+        <div class="voice-title">中国发展高层论坛 2026</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">2026年Q2启动Blindsight项目，通过直接向大脑视觉皮层输送电信号帮助失明者恢复视觉感知。R1手术机器人将实现"流水线式"自动化脑部手术。</div>
+        <div class="voice-person">Elon Musk</div>
+        <div class="voice-title">Neuralink 2026春季发布会</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">侵入式脑机接口资本关注度最高，AI+脑机接口算法是投资热点，非侵入式消费脑机接口资本布局加速，核心零部件投资升温。</div>
+        <div class="voice-person">行业观察</div>
+        <div class="voice-title">中国信通院《脑机接口技术与应用研究报告》</div>
+      </div>
+      <div class="voice-card">
+        <div class="voice-quote">中国企业在全球脑机接口竞赛中不再是追随者。强脑科技与Neuralink形成"双雄并立"格局——一个在侵入式，一个在非侵入式，各据一端。</div>
+        <div class="voice-person">行业评论</div>
+        <div class="voice-title">新华社《时代摘要》对话 · 2025.11</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MATH & DECODING ========== -->
+<section id="math" class="math-section">
+  <div class="container">
+    <div class="section-label">08 / Decoding Mathematics</div>
+    <h2 class="section-title">解码的<em>数学</em>——信号、公式与密码</h2>
+    <p style="color:var(--text-dim); margin-bottom:48px; max-width:680px; font-size:15px;">
+      脑机接口的核心是从噪声中提取信号，从信号中解码意图。这既是神经科学问题，也是信息论与计算数学问题——神经元放电序列如同加密的报文，而解码算法就是破解密钥的密码学。
+    </p>
+    <div class="math-grid">
+      <div class="math-card">
+        <div class="math-label">信号解码模型</div>
+        <div class="math-formula">y(t) = f(x₁(t), x₂(t), ..., xₙ(t)) + ε(t)</div>
+        <div class="math-desc">神经信号解码的基本框架：n个神经元的放电序列{xᵢ(t)}经非线性映射f解码为运动输出y(t)，ε(t)为噪声。现代BCI用深度学习替代手工设计的f。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">泊松点过程编码</div>
+        <div class="math-formula">P(k; λt) = (λt)ᵏe^(-λt) / k!</div>
+        <div class="math-desc">神经元放电被建模为非齐次泊松过程，λ为随时间变化的放电率。这是神经编码的数学基石——解码问题本质上是从观测的k次放电反推潜在的λ(t)。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">线性判别分析 (LDA)</div>
+        <div class="math-formula">w = Σ⁻¹(μ₁ - μ₂)</div>
+        <div class="math-desc">BCI运动想象分类的经典算法：寻找最优投影方向w，使两类信号的类间方差与类内方差之比最大化。EEG信号的二分类（左手/右手运动想象）至今仍在用。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">卡尔曼滤波</div>
+        <div class="math-formula">xₖ = A·xₖ₋₁ + B·uₖ + wₖ<br>zₖ = H·xₖ + vₖ</div>
+        <div class="math-desc">实时脑控光标的标准解码器：状态空间方程描述运动轨迹如何映射到神经信号，卡尔曼滤波递归估计运动状态。BrainGate临床试验的核心算法之一。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">互信息 / 解码比特率</div>
+        <div class="math-formula">I(S;R) = H(S) - H(S|R)</div>
+        <div class="math-desc">BCI系统性能的终极度量：从神经信号R中能提取关于意图S的信息量（比特/秒）。侵入式高密度阵列可达数十bit/s，非侵入式EEG通常仅个位数bit/s。</div>
+      </div>
+      <div class="math-card">
+        <div class="math-label">HH模型 · 神经元动力学</div>
+        <div class="math-formula">C·dV/dt = I - I_Na - I_K - I_L</div>
+        <div class="math-desc">Hodgkin-Huxley方程——描述神经元膜电位V如何由钠、钾等离子通道电流产生动作电位。BCI电极采集的正是这层膜电位的集体放电。</div>
+      </div>
+    </div>
+
+    <div class="magic-numbers">
+      <div class="magic-cell">
+        <div class="magic-num">~10¹¹</div>
+        <div class="magic-label">人脑神经元</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">~10¹⁴</div>
+        <div class="magic-label">突触连接</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">1ms</div>
+        <div class="magic-label">动作电位时标</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">~40bit/s</div>
+        <div class="magic-label">侵入式解码速率</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">9µm</div>
+        <div class="magic-label">最薄柔性电极</div>
+      </div>
+      <div class="magic-cell">
+        <div class="magic-num">1/100</div>
+        <div class="magic-label">拉伸力对比 Neuralink</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== OUTLOOK ========== -->
+<section id="outlook">
+  <div class="container">
+    <div class="section-label">09 / Outlook</div>
+    <h2 class="section-title">趋势<em>展望</em></h2>
+    <div class="outlook-list">
+      <div class="outlook-item">
+        <div class="outlook-year">2026</div>
+        <div>
+          <h3>临床验证加速期</h3>
+          <p>Neuralink 21名植入者、Synchron多中心试验、中国侵入式临床首发——2026年是BCI从实验室走向临床证据积累的关键一年。手术机器人自动化（R1）降低植入门槛。</p>
+        </div>
+      </div>
+      <div class="outlook-item">
+        <div class="outlook-year">2027</div>
+        <div>
+          <h3>AI × BCI 融合拐点</h3>
+          <p>大模型时代的神经解码从线性模型迈入深度学习范式。Transfomer架构的神经信号解码器、LLM辅助的语言解码，将把意念打字速率从每分钟数十字符提升至上百字符。</p>
+        </div>
+      </div>
+      <div class="outlook-item">
+        <div class="outlook-year">2028</div>
+        <div>
+          <h3>消费级非侵入式爆发</h3>
+          <p>柔性干电极、水凝胶材料、轻量化算法三件套成熟，非侵入式BCI从医疗扩展到消费电子：脑机耳机、专注力头环、情绪监测可穿戴设备进入大众市场。</p>
+        </div>
+      </div>
+      <div class="outlook-item">
+        <div class="outlook-year">2030</div>
+        <div>
+          <h3>中国目标：世界领先</h3>
+          <p>《新一代人工智能发展规划》明确脑机接口为未来产业，目标2030年达到世界领先水平。中美双极格局成型，非侵入式中国并跑、侵入式美国领跑的差异化竞争。</p>
+        </div>
+      </div>
+      <div class="outlook-item">
+        <div class="outlook-year">2030+</div>
+        <div>
+          <h3>双向闭环与感官重建</h3>
+          <p>从单向"读脑"走向双向"读写"：视觉皮层刺激恢复光明（Blindsight路线）、听觉皮层重建、海马体记忆增强。BCI从运动辅助升级为感觉-运动闭环重建。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <p>// 引力章鱼 GRAVITY OCTOPUS — 脑机接口前沿观察 · 数据截至 2026.10</p>
+    <p style="margin-top:8px;">信息来源：Neuralink官方 · 36氪 · 钛媒体 · 澎湃新闻 · 光明网 · 中科院 · 清华大学 · Nature/Science 子刊</p>
+  </div>
+</footer>
+
+</body>
+</html>
