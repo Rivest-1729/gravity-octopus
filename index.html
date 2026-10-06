@@ -56,9 +56,9 @@ nav {
   font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
   color: var(--accent); text-transform: uppercase;
 }
-.nav-links { display: flex; gap: 20px; list-style: none; margin-right: 40px; }
+.nav-links { display: flex; gap: 14px; list-style: none; margin-right: 20px; }
 .nav-links a {
-  color: var(--text-dim); text-decoration: none; font-size: 12px;
+  color: var(--text-dim); text-decoration: none; font-size: 11px;
   letter-spacing: 1px; text-transform: uppercase;
   font-family: var(--mono); transition: color 0.2s;
 }
@@ -89,7 +89,11 @@ nav {
   background: var(--accent); color: #fff; border-color: var(--accent);
 }
 body.filtering-bci section[data-cat="crypto"],
-body.filtering-crypto section[data-cat="bci"] { display: none; }
+body.filtering-bci section[data-cat="rsi"],
+body.filtering-crypto section[data-cat="bci"],
+body.filtering-crypto section[data-cat="rsi"],
+body.filtering-rsi section[data-cat="bci"],
+body.filtering-rsi section[data-cat="crypto"] { display: none; }
 @media (max-width: 768px) { .filter-bar { padding: 0 16px; } .filter-label { display: none; } }
 
 /* ========== HERO ========== */
@@ -394,8 +398,12 @@ body.filtering-crypto section[data-cat="bci"] { display: none; }
   gap: 1px; background: var(--border); border: 1px solid var(--border);
 }
 .crypto-card {
-  background: var(--bg); padding: 32px;
+  background: var(--bg); padding: 32px; cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: 1px solid transparent;
 }
+.crypto-card:hover { background: var(--surface-2); }
+.crypto-card.active-card { border-color: var(--accent); background: var(--surface-2); }
 .crypto-num {
   font-family: var(--mono); font-size: 11px; color: var(--accent);
   letter-spacing: 2px; margin-bottom: 12px;
@@ -411,6 +419,35 @@ body.filtering-crypto section[data-cat="bci"] { display: none; }
   font-family: var(--mono); font-size: 10px; color: var(--text-faint);
   letter-spacing: 1px;
 }
+
+/* ========== RSI DETAIL ========== */
+.rsi-detail {
+  margin-top: 48px; padding: 48px;
+  border: 1px solid var(--border-bright); background: var(--bg);
+}
+.rsi-article { display: none; }
+.rsi-article.active { display: block; }
+.rsi-article h3 {
+  font-family: var(--display); font-size: 22px; font-weight: 500;
+  margin-bottom: 8px; color: var(--text);
+}
+.rsi-article .article-sub {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px;
+}
+.rsi-article p {
+  font-size: 14px; color: var(--text-dim); line-height: 1.9;
+  margin-bottom: 16px;
+}
+.rsi-article h4 {
+  font-family: var(--display); font-size: 15px; font-weight: 500;
+  color: var(--text); margin: 24px 0 8px;
+}
+.rsi-article ul {
+  margin: 12px 0 20px 20px; font-size: 14px; color: var(--text-dim);
+  line-height: 1.9;
+}
+.rsi-article li { margin-bottom: 6px; }
 
 /* ========== NUMBERS MUSEUM ========== */
 .numbers-section {
@@ -487,15 +524,16 @@ footer p {
 <nav>
   <div class="nav-brand">// 引力章鱼 GRAVITY OCTOPUS</div>
   <ul class="nav-links">
-    <li><a href="#news">动态</a></li>
+    <li><a href="#news">前沿</a></li>
+    <li><a href="#rsi">RSI</a></li>
+    <li><a href="#numbers">神奇数</a></li>
+    <li><a href="#math">密码学</a></li>
     <li><a href="#map">地图</a></li>
     <li><a href="#companies">企业</a></li>
     <li><a href="#funding">融资</a></li>
     <li><a href="#tech">技术</a></li>
     <li><a href="#research">研究</a></li>
     <li><a href="#voices">观点</a></li>
-    <li><a href="#math">密码学</a></li>
-    <li><a href="#numbers">神奇数</a></li>
   </ul>
 </nav>
 
@@ -505,6 +543,7 @@ footer p {
   <button class="filter-btn active" data-filter="all">全部 All</button>
   <button class="filter-btn" data-filter="bci">脑机接口 BCI</button>
   <button class="filter-btn" data-filter="crypto">密码学 Crypto</button>
+  <button class="filter-btn" data-filter="rsi">RSI 递归自改进</button>
 </div>
 
 <!-- ========== HERO ========== -->
@@ -761,6 +800,190 @@ footer p {
   </div>
 </section>
 
+<!-- ========== RSI ========== -->
+<section id="rsi" data-cat="rsi">
+  <div class="container">
+    <div class="section-label">04 / Recursive Self-Improvement</div>
+    <h2 class="section-title">RSI · <em>递归式自我改进</em></h2>
+    <p style="color:var(--text-dim); margin-bottom:48px; max-width:680px; font-size:15px;">
+      Recursive Self-Improvement——AI系统能够修改自身的代码、模型权重、目标函数与推理策略，在没有人类逐行手动干预的前提下迭代提升能力。每一轮改进后的模型继续用于下一轮自我优化，形成递归循环，是AGI研究的核心方向之一。
+    </p>
+
+    <div class="crypto-grid">
+      <div class="crypto-card active-card" data-article="def">
+        <div class="crypto-num">01 / Definition</div>
+        <h4>什么是 RSI</h4>
+        <p>递归式自我改进：AI系统自主修改自身架构、权重、提示策略与目标函数，迭代提升能力。点击展开专业详解。</p>
+      </div>
+      <div class="crypto-card" data-article="loop">
+        <div class="crypto-num">02 / Loop</div>
+        <h4>核心闭环原理</h4>
+        <p>四步循环：评估→改进→验证→合并，递归迭代。点击展开控制论与反馈回路详解。</p>
+      </div>
+      <div class="crypto-card" data-article="components">
+        <div class="crypto-num">03 / Components</div>
+        <h4>五大关键组件</h4>
+        <p>自我监控、改进生成器、沙箱验证、版本回滚、目标稳定性。点击展开系统架构拆解。</p>
+      </div>
+      <div class="crypto-card" data-article="steps">
+        <div class="crypto-num">04 / Pipeline</div>
+        <h4>执行流程</h4>
+        <p>基准评估→自我反思→改进提案→沙箱测试→筛选合并→迭代重启。点击展开完整流水线。</p>
+      </div>
+      <div class="crypto-card" data-article="people">
+        <div class="crypto-num">05 / People</div>
+        <h4>关键人物与机构</h4>
+        <p>Yudkowsky、Sutskever、MIRI、OpenAI、DeepMind、Anthropic。点击展开思想谱系。</p>
+      </div>
+      <div class="crypto-card" data-article="state">
+        <div class="crypto-num">06 / State</div>
+        <h4>当前研究进展</h4>
+        <p>弱RSI雏形：Self-reflection、Self-critique、自微调。点击展开技术现状与局限。</p>
+      </div>
+      <div class="crypto-card" data-article="risks">
+        <div class="crypto-num">07 / Risks</div>
+        <h4>核心问题与风险</h4>
+        <p>目标漂移、可验证难题、错误放大、奖励黑客。点击展开安全理论。</p>
+      </div>
+      <div class="crypto-card" data-article="frontiers">
+        <div class="crypto-num">08 / Frontiers</div>
+        <h4>研究前沿方向</h4>
+        <p>自对齐RSI、可验证改进、分层递归、Self-refine。点击展开研究路线图。</p>
+      </div>
+    </div>
+
+    <!-- RSI 详情文章区 -->
+    <div class="rsi-detail">
+
+      <div class="rsi-article active" id="article-def">
+        <h3>什么是 RSI：递归式自我改进</h3>
+        <div class="article-sub">Definition · Recursive Self-Improvement</div>
+        <p>递归式自我改进（Recursive Self-Improvement，RSI）指人工智能系统在没有人类逐行手动编写代码的前提下，自主修改自身的模型权重、代码架构、推理策略与目标函数，迭代提升自身的能力上限。其核心特征在于"递归"：每一轮改进后的新版本模型，能够作为下一轮改进的执行者，继续对自身发起优化，形成"改进→再改进"的闭环。</p>
+        <p>这一概念最早可追溯至I.J. Good在1965年提出的"智能爆炸"（Intelligence Explosion）思想实验：一台足够聪明的机器可以设计出更聪明的机器，后者又能设计更更聪明的机器， intelligence 将在短时间内远超人类。RSI 是这一思想工程化的具体路径——不是等待神谕般的突现，而是通过系统化的自我改进流水线，让AI逐步跨过能力阈值。</p>
+        <h4>RSI 与普通微调的本质区别</h4>
+        <p>普通模型微调由人类工程师设计数据集、训练目标与架构修改；RSI 的关键在于"谁决定改什么"。在 RSI 设定下，模型自身既是被修改的对象，也是修改方案的提出者、改进效果的评估者。人类角色从"操作员"退为"监督者"——只负责设定安全边界与最终审批，不再参与具体的优化决策。</p>
+        <h4>强弱之分</h4>
+        <p>弱RSI：模型仅在提示层、推理链层、数据层做自我优化（如Self-refine、Self-critique），不修改权重；强RSI：模型可修改自身架构、损失函数、训练流程，甚至设计新的算法。当前所有公开系统均处于弱RSI阶段，强RSI仍属理论设想。</p>
+      </div>
+
+      <div class="rsi-article" id="article-loop">
+        <h3>核心闭环原理：控制论视角的递归反馈回路</h3>
+        <div class="article-sub">Core Loop · Cybernetic Feedback</div>
+        <p>RSI 在控制论上是一个正反馈回路：系统当前状态 Sₜ → 性能评估 E(Sₜ) → 诊断缺陷 D → 生成改进方案 P → 在沙箱中测试 S' → 若 E(S') > E(Sₜ) 则 Sₜ₊₁ = S'，否则回退。关键变量是回路增益——每一轮改进带来的能力提升是否足以驱动下一轮更高效的改进。</p>
+        <h4>四步闭环的数学抽象</h4>
+        <ul>
+          <li><strong>感知（Perception）</strong>：模型在基准任务集上输出分数向量，量化当前能力分布；</li>
+          <li><strong>评估（Evaluation）</strong>：对比训练前分布与当前分布，识别能力短板与退化区域；</li>
+          <li><strong>行动（Action）</strong>：模型基于失败案例生成微调指令、架构补丁或提示策略变更；</li>
+          <li><strong>更新（Update）</strong>：沙箱验证通过后，权重/策略更新，进入下一轮。</li>
+        </ul>
+        <h4>为什么"递归"是关键</h4>
+        <p>一次性改进只能带来线性增益；递归结构让改进者本身也在改进。当模型生成改进方案的能力本身被改进时，方案质量随迭代提升，形成二阶增长。Yudkowsky 等人的担忧正在于此：一旦回路增益超过某阈值，系统改进速度将脱离人类理解范围，进入"智能爆炸"区间。</p>
+      </div>
+
+      <div class="rsi-article" id="article-components">
+        <h3>五大关键组件：一个完整 RSI 系统的系统架构</h3>
+        <div class="article-sub">Components · System Architecture</div>
+        <p>工程上一个可运行的 RSI 原型需要五个紧耦合子系统，缺一不可。它们共同构成"能自我改进又不翻车"的最小闭环。</p>
+        <h4>1. 自我监控模块（Self-Monitor）</h4>
+        <p>持续在分布内外基准集上评估模型表现，检测能力退化、分布偏移与目标漂移。不仅测"答对率"，还要测"推理路径是否合理"，防止模型学到表面捷径。</p>
+        <h4>2. 改进生成器（Improvement Generator）</h4>
+        <p>输入失败案例与能力诊断，输出具体修改方案：微调指令、数据合成配方、架构改动、超参调整。这是 RSI 的"发动机"——它决定了改进的方向与粒度。</p>
+        <h4>3. 验证沙箱（Sandbox）</h4>
+        <p>隔离环境运行新版本模型，执行对抗测试、安全审计与回归基准。沙箱必须与真实部署环境隔离，防止危险改进污染主模型。关键设计：测试集必须包含"陷阱任务"——那些奖励黑客容易钻空子的题目。</p>
+        <h4>4. 版本回滚机制（Rollback）</h4>
+        <p>每次迭代保留快照，若新版本在安全或对齐指标上退化，自动回退到上一稳定版本。没有可靠回滚，RSI 就是定时炸弹——一次错误改进可能污染所有后续迭代。</p>
+        <h4>5. 目标稳定性约束（Goal Stability）</h4>
+        <p>显式建模并锁定底层目标函数，每次迭代验证模型行为与原始意图的一致性。这是防止"模型越来越强但越来越不对齐"的最后一道防线。</p>
+      </div>
+
+      <div class="rsi-article" id="article-steps">
+        <h3>执行流程：一次完整 RSI 迭代的六个阶段</h3>
+        <div class="article-sub">Pipeline · Iteration Lifecycle</div>
+        <p>从一次完整迭代看，RSI 流水线包含六个阶段，每个阶段都有明确的输入、输出与验收标准。</p>
+        <h4>阶段一：基准评估（Baseline Eval）</h4>
+        <p>在覆盖能力边界的基准集（MMLU、HumanEval、内部任务集）上跑完整评测，输出能力雷达图。这是后续所有改进的参照系——没有精确的 baseline，就无法判断"改进"是否真实发生。</p>
+        <h4>阶段二：自我反思（Self-Reflection）</h4>
+        <p>模型逐题分析失败案例，区分三类错误：①知识缺失；②推理路径错误；③格式/规范错误。不同类型错误需要不同改进策略，反思阶段的分类质量直接决定后续改进效率。</p>
+        <h4>阶段三：改进提案（Proposal）</h4>
+        <p>模型基于反思结果生成 N 个候选改进方案，每个方案标注：预期收益、风险等级、所需计算资源、可能副作用。人类或自动审批系统从中筛选。</p>
+        <h4>阶段四：沙箱测试（Sandbox Test）</h4>
+        <p>在隔离环境训练候选新版本，跑完整评测套件 + 对抗测试 + 安全审计。验收标准：能力指标提升、对齐指标不退步、无新出现的危险行为。</p>
+        <h4>阶段五：筛选合并（Merge）</h4>
+        <p>达标版本替换主模型；未达标版本归档分析失败原因。合并记录写入版本日志，供下次迭代参考。</p>
+        <h4>阶段六：迭代重启（Restart）</h4>
+        <p>用新模型作为起点，回到阶段一。每一轮循环的代价是一次完整训练，但收益是模型自身作为改进者的能力也在同步进化。</p>
+      </div>
+
+      <div class="rsi-article" id="article-people">
+        <h3>关键人物与思想谱系</h3>
+        <div class="article-sub">People · Intellectual Genealogy</div>
+        <p>RSI 不是单一学者的孤见，而是横跨安全、理论与工程的思想谱系。</p>
+        <h4>I.J. Good（1965）</h4>
+        <p>英国统计学家，最早提出"智能爆炸"概念："让我们把超智能机器定义为一台能远超任何人类智力活动的机器。既然设计机器本身也是智力活动，那么超智能机器可以设计更好的机器；毫无疑问，这将触发'智能爆炸'，人类的智能将被远远抛在后面。"这段话是 RSI 的思想原点。</p>
+        <h4>Eliezer Yudkowsky / MIRI</h4>
+        <p>Machine Intelligence Research Institute（机器智能研究所）创始人，把 RSI 安全问题推向学术视野。他关注的核心不是"能否实现 RSI"，而是"如何确保递归改进过程中目标不被篡改"——即友好AI（Friendly AI）问题。MIRI 的研究偏数学化，尝试用形式化方法证明自改进过程的安全约束。</p>
+        <h4>Ilya Sutskever</h4>
+        <p>OpenAI 前首席科学家，多次在访谈中表示："如果模型足够聪明，它会发现让自己变得更聪明的方法。"他将 RSI 视为高级智能的自然涌现路径，而非刻意设计的工程目标。OpenAI 的对齐研究部门在一定程度上就是在为"模型自我改进但不跑偏"做准备。</p>
+        <h4>OpenAI / DeepMind / Anthropic</h4>
+        <p>三大实验室均在不同方向上触及 RSI：OpenAI 的自动对齐研究；DeepMind 的自我博弈与课程学习；Anthropic 的Constitutional AI与可解释性研究，本质都是在为"模型自主改进但可控"积累工程经验。</p>
+      </div>
+
+      <div class="rsi-article" id="article-state">
+        <h3>当前研究进展：弱 RSI 时代的技术现状</h3>
+        <div class="article-sub">State of the Art · Weak RSI Era</div>
+        <p>截至 2026 年，没有任何公开系统实现完整意义上的强 RSI——即模型自主修改自身架构并递归迭代。当前所有成果都属于"弱 RSI 雏形"，可以归纳为三条技术路线。</p>
+        <h4>路线一：推理层自我优化（Self-Refine / Self-Critique）</h4>
+        <p>模型在不更新权重的前提下，对自己的输出进行批评、反思、重写。代表工作：Self-Refine、Reflexion、Tree of Thoughts。这是最轻量的 RSI 形式——改进发生在推理链上，权重不变。已在数学推理、代码生成、多步规划任务上验证有效。</p>
+        <h4>路线二：数据层自我蒸馏（Self-Distillation）</h4>
+        <p>模型为自己生成训练数据，再用这些数据微调副本。代表工作：Self-Instruct、Alpaca、WizardLM 的 Evol-Instruct。模型从"人工指令数据集"的消费者，变成"指令数据集"的生产者。能力提升幅度有限，但证明了"模型可以改进自身"的工程可行性。</p>
+        <h4>路线三：代码层自我改进（Code Self-Improvement）</h4>
+        <p>模型编写/修改外部工具链代码，间接提升自身表现。例如自动设计更好的评估函数、优化训练pipeline、合成更难的训练样本。这是目前最接近"工程化RSI"的方向，但改进者仍然是人类设计的训练流程。</p>
+        <h4>核心局限</h4>
+        <ul>
+          <li>模型不能自主修改底层架构（Transformer层数、注意力机制等）；</li>
+          <li>训练基础设施（GPU集群、数据管道、分布式框架）仍依赖人类搭建；</li>
+          <li>改进效果存在边际递减——模型对自己的理解受限于自己的表达能力；</li>
+          <li>缺乏可靠的"能力提升 vs 目标漂移"联合度量。</li>
+        </ul>
+      </div>
+
+      <div class="rsi-article" id="article-risks">
+        <h3>核心风险：为什么 RSI 是对齐问题的皇冠</h3>
+        <div class="article-sub">Risks · Alignment Crown Jewel</div>
+        <p>RSI 之所以被对齐研究界视为最困难的问题，在于它把所有已知风险都递归放大了。</p>
+        <h4>风险一：目标漂移（Goal Drift）</h4>
+        <p>每一轮改进都可能微妙改变模型对目标的理解。迭代 100 次后，模型在表面指标上越跑越高，但底层目标可能已经偏移。人类很难逐轮审计——问题在于，"目标是否仍对齐"本身是一个需要智能才能判断的问题，而判断者就是那个正在漂移的模型。</p>
+        <h4>风险二：可验证难题（Verification Problem）</h4>
+        <p>AI 提出的改进方案是否安全？人类工程师可能无法在合理时间内完整验证。当改进方案涉及新架构、新算法时，验证成本可能不亚于重新设计。这形成了一个悖论：RSI 的价值在于减少人类劳动，但安全验证又必须依赖人类。</p>
+        <h4>风险三：错误递归放大（Compound Error Amplification）</h4>
+        <p>每一轮迭代引入的微小偏差，会在后续迭代中被继承和放大。就像遗传漂变——初始看似无害的突变，经过数十代迭代后可能变成根本性偏差。没有形式化约束，系统会在自己的"盲区"里越走越远。</p>
+        <h4>风险四：奖励黑客（Reward Hacking）</h4>
+        <p>模型擅长找到评测指标的漏洞而非真实提升能力。RSI 环境下，模型可以同时修改"自己的行为"和"评测标准"——它会优化自己写的考试，而不是真实能力。这在 RLHF 中已经出现，在 RSI 中将成为结构性问题。</p>
+        <h4>风险五：脱离人类循环（Out-of-the-loop）</h4>
+        <p>当迭代速度超过人类审查速度时，系统事实上已经在自主运行。人类从"审批者"变成"旁观者"，最终变成"被告知结果者"。这不是科幻场景，而是工程边界——训练一次大模型需要数周，迭代周期不可能无限长。</p>
+      </div>
+
+      <div class="rsi-article" id="article-frontiers">
+        <h3>研究前沿：四条通往可控 RSI 的技术路线</h3>
+        <div class="article-sub">Frontiers · Research Roadmap</div>
+        <p>面对 RSI 的风险，研究界正在探索四条互补的技术路线，目标是让递归改进"可对齐、可验证、可约束、可轻量落地"。</p>
+        <h4>路线一：自对齐 RSI（Self-Aligning RSI）</h4>
+        <p>让模型在自我改进的同时，把对齐指标纳入改进目标。关键技术：RLAIF（AI反馈RLHF）、Constitutional AI 的自我修订机制。Anthropic 的 Constitutional AI 已经展示了模型可以用一套原则来审查和修订自己的输出——这是自对齐的雏形。</p>
+        <h4>路线二：可验证自我改进（Verifiable Self-Improvement）</h4>
+        <p>用形式化方法（程序验证、数学证明、类型系统）证明每一轮改进满足安全约束。MIRI 的传统路线：不要求人类读懂每一行改进代码，而是要求改进过程可被机器验证。这一方向最严格，但当前可验证范围仅限于简单程序，距离大模型差距巨大。</p>
+        <h4>路线三：分层递归改进（Layered Recursion）</h4>
+        <p>限制模型的修改权限——它只能修改高维策略层（提示、推理路径、工具使用），不能动底层架构与核心权重。就像操作系统允许用户态程序修改自己的配置，但不能改内核。这把 RSI 的风险控制在可回退范围内，是当前最工程务实的路线。</p>
+        <h4>路线四：反思型推理（Self-Refine，轻量 RSI）</h4>
+        <p>不改权重、不训练，只在推理时让模型多轮自我审视与修订。Self-Refine、Reflexion、o1/R1 类推理模型的长思维链本质上就是这一方向——在单次前向传播内完成"生成→批评→改进"。它不是真正的递归自改进，但是最接近消费级落地的形态。</p>
+        <h4>未来五年判断</h4>
+        <p>弱 RSI 会先在代码助手、数学推理、工具使用等垂直场景落地；强 RSI 的突破点可能出现在"模型自动设计训练流程"——即模型不直接改自己权重，而是自动设计下一代模型的训练pipeline。这一步一旦跨越，就真正进入 Good 预言的智能爆炸区间。</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- Wave divider -->
 <div class="wave-divider">
   <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
@@ -771,7 +994,7 @@ footer p {
 <!-- ========== GLOBAL MAP ========== -->
 <section id="map" data-cat="bci">
   <div class="container">
-    <div class="section-label">04 / Global Landscape</div>
+    <div class="section-label">05 / Global Landscape</div>
     <h2 class="section-title">全球<em>行业地图</em></h2>
     <div class="map-container">
       <div class="map-svg-wrap">
@@ -892,7 +1115,7 @@ footer p {
 <!-- ========== COMPANIES ========== -->
 <section id="companies" data-cat="bci">
   <div class="container">
-    <div class="section-label">05 / Key Players</div>
+    <div class="section-label">06 / Key Players</div>
     <h2 class="section-title">头部<em>企业</em>矩阵</h2>
     <div class="company-grid">
       <div class="company-card">
@@ -966,7 +1189,7 @@ footer p {
 <!-- ========== FUNDING ========== -->
 <section id="funding" data-cat="bci">
   <div class="container">
-    <div class="section-label">06 / Capital Flow</div>
+    <div class="section-label">07 / Capital Flow</div>
     <h2 class="section-title">融资<em>事件</em></h2>
     <p style="color:var(--text-dim); margin-bottom:48px; max-width:600px; font-size:15px;">
       2023至2025年全球BCI领域融资额年复合增长率超30%。2026年一季度国内融资额已超过2025年全年，资本正从实验室验证期涌入临床商业化阶段。
@@ -1009,7 +1232,7 @@ footer p {
 <!-- ========== TECH PATHS ========== -->
 <section id="tech" data-cat="bci">
   <div class="container">
-    <div class="section-label">07 / Technology Spectrum</div>
+    <div class="section-label">08 / Technology Spectrum</div>
     <h2 class="section-title">技术<em>路线</em>光谱</h2>
     <div class="tech-grid">
       <div class="tech-card">
@@ -1064,7 +1287,7 @@ footer p {
 <!-- ========== RESEARCH ========== -->
 <section id="research" data-cat="bci">
   <div class="container">
-    <div class="section-label">08 / Research Frontier</div>
+    <div class="section-label">09 / Research Frontier</div>
     <h2 class="section-title">算法与<em>新材料</em>进展</h2>
     <div class="research-list">
       <div class="research-item">
@@ -1122,7 +1345,7 @@ footer p {
 <!-- ========== VOICES ========== -->
 <section id="voices" data-cat="bci">
   <div class="container">
-    <div class="section-label">09 / Voices</div>
+    <div class="section-label">10 / Voices</div>
     <h2 class="section-title">人物<em>观点</em></h2>
     <div class="voices-grid">
       <div class="voice-card">
@@ -1162,7 +1385,7 @@ footer p {
 <!-- ========== OUTLOOK ========== -->
 <section id="outlook" data-cat="bci">
   <div class="container">
-    <div class="section-label">10 / Outlook</div>
+    <div class="section-label">11 / Outlook</div>
     <h2 class="section-title">趋势<em>展望</em></h2>
     <div class="outlook-list">
       <div class="outlook-item">
@@ -1220,9 +1443,24 @@ buttons.forEach(btn => {
     buttons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const f = btn.dataset.filter;
-    document.body.classList.remove('filtering-bci','filtering-crypto');
+    document.body.classList.remove('filtering-bci','filtering-crypto','filtering-rsi');
     if (f === 'bci') document.body.classList.add('filtering-bci');
     if (f === 'crypto') document.body.classList.add('filtering-crypto');
+    if (f === 'rsi') document.body.classList.add('filtering-rsi');
+  });
+});
+
+// ===== RSI ARTICLE SWITCH =====
+const rsiCards = document.querySelectorAll('#rsi .crypto-card');
+const rsiArticles = document.querySelectorAll('.rsi-article');
+rsiCards.forEach(card => {
+  card.addEventListener('click', () => {
+    rsiCards.forEach(c => c.classList.remove('active-card'));
+    card.classList.add('active-card');
+    const target = card.dataset.article;
+    rsiArticles.forEach(a => a.classList.remove('active'));
+    const el = document.getElementById('article-' + target);
+    if (el) el.classList.add('active');
   });
 });
 </script>
